@@ -4,6 +4,7 @@
 secrets.ini
 api_keys.json
 secrets.txt
+token.txt
 
 # --- Copyrighted Material ---
 # Ignore folders containing lyrics or audio files

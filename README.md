@@ -1,0 +1,1 @@
+This project is about enriching music emotion recognition - with an emphasis on music therapy domains and a focus on explainability of features (for better adoptation from music therapists, as well as for compute efficiency)
