@@ -1,0 +1,34 @@
+# --- Secrets ---
+# Ignore any files containing API keys or credentials
+*.env
+secrets.ini
+api_keys.json
+secrets.txt
+
+# --- Copyrighted Material ---
+# Ignore folders containing lyrics or audio files
+data
+
+# --- Irrelevant Folders ---
+deprecated
+notes
+
+# --- Large Files ---
+# Ignore common large file types like datasets or model weights
+*.csv
+*.zip
+*.h5
+*.pth
+*.onnx
+models/
+
+# --- Python & Jupyter Junk ---
+# Ignore common temporary files
+__pycache__/
+*.ipynb_checkpoints/
+.DS_Store
+.vscode/
+
+# --- Conda Environment ---
+# Do not track the environment folder itself
+tf-gpu/
