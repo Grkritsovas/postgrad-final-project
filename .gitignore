@@ -1,35 +1,64 @@
 # --- Secrets ---
-# Ignore any files containing API keys or credentials
 *.env
+.env.*
 secrets.ini
 api_keys.json
 secrets.txt
 token.txt
+.envrc
 
 # --- Copyrighted Material ---
 # Ignore folders containing lyrics or audio files
 data
 
 # --- Irrelevant Folders ---
+results
 deprecated
 notes
+notebooks/temp
+notebooks/experimental_map
+notebooks/sample_images
+notebooks/Untitled.ipynb
 
 # --- Large Files ---
-# Ignore common large file types like datasets or model weights
+# --- Large/Binary Artifacts ---
 *.csv
 *.zip
 *.h5
 *.pth
+*.pt
+*.ckpt
 *.onnx
+*.npz
+*.npy
 models/
+checkpoints/
+runs/
+wandb/
+lightning_logs/
 
 # --- Python & Jupyter Junk ---
-# Ignore common temporary files
 __pycache__/
 *.ipynb_checkpoints/
 .DS_Store
 .vscode/
+.idea/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Builds / Packaging ---
+build/
+dist/
+*.egg-info/
 
 # --- Conda Environment ---
 # Do not track the environment folder itself
+.venv/
+venv/
+env/
 tf-gpu/
+torch-gpu/
+
+# --- Logs ---
+*.log
