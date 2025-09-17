@@ -1,6 +1,9 @@
-# Project XAI with traditional ML for music emotion recognition (valence–arousal - **VA**).
+# Project
+XAI with traditional ML for music emotion recognition (valence-arousal (**VA**)).
 
-**Data:** DEAM **Features:** 260 openSMILE LLDs over 45s (or full song) at 2 Hz (IS13 COMPARE LLD-FUNC.CONF).
+**Main Data:** DEAM
+
+**Features:** 260 openSMILE LLDs over 45s (or full song) at 2 Hz (IS13 COMPARE LLD-FUNC.CONF).
 
 **ML prep:** roll time series into statistical descriptors - default **8** and extended **15**.
 --- 
