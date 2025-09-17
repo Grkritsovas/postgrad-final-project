@@ -6,6 +6,7 @@ XAI with traditional ML for music emotion recognition **VA** (valence-arousal).
 **Features:** 260 openSMILE LLDs over 45s (or full song) at 2 Hz (IS13_ComParE_lld-func.conf).
 
 **ML prep:** roll time series into statistical descriptors - default **8** and extended **15**.
+
 --- 
 ## Notebook map
 
