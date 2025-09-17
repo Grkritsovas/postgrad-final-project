@@ -22,6 +22,7 @@ Generates 8 feature configs:
 8) **Global PCA** on (2) to **95% var** → ~**317 PCs**
 
 > PCA is scale-sensitive → for (5–8) we use the **custom split** only (fit scaler+PCA on train, transform val/test) to avoid duplicating datasets.
+> Also generate key/mode metadata (mode will be used for minorness, weighted by key_confidence - mode prediction with madmom)
 
 ---
 
