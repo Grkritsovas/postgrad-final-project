@@ -4,7 +4,9 @@
 
 **ML prep:** roll time series into statistical descriptors — default **8** and extended **15**.
 --- 
-## Notebook map ### 01 - Build datasets Generates 8 feature configs:
+## Notebook map
+
+### 01 - Build datasets Generates 8 feature configs:
 1) **2080** = 260 LLD × **8** stats (min, max, q25, q75, mean, std, kurtosis, skew)
 2) **3900** = 260 LLD × **15** stats (adds median, range, trend, variation, …)
 3) **1257** = (1) with **perceptual-group decorrelation**
