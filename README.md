@@ -1,5 +1,5 @@
 # Project
-XAI with traditional ML for music emotion recognition (valence-arousal (**VA**)).
+XAI with traditional ML for music emotion recognition **VA**(valence-arousal).
 
 **Main Data:** DEAM
 
