@@ -2,11 +2,12 @@
 
 **Data:** DEAM **Features:** 260 openSMILE LLDs over 45s (or full song) at 2 Hz (IS13 COMPARE LLD-FUNC.CONF).
 
-**ML prep:** roll time series into statistical descriptors — default **8** and extended **15**.
+**ML prep:** roll time series into statistical descriptors - default **8** and extended **15**.
 --- 
 ## Notebook map
 
-### 01 - Build datasets Generates 8 feature configs:
+### 01 - Build datasets
+Generates 8 feature configs:
 1) **2080** = 260 LLD × **8** stats (min, max, q25, q75, mean, std, kurtosis, skew)
 2) **3900** = 260 LLD × **15** stats (adds median, range, trend, variation, …)
 3) **1257** = (1) with **perceptual-group decorrelation**
@@ -17,11 +18,14 @@
 8) **Global PCA** on (2) to **95% var** → ~**317 PCs**
  > PCA is scale-sensitive → for (5–8) we use the **custom split** only (fit scaler+PCA on train, transform val/test) to avoid duplicating datasets.
 ---
-### 02 - EDA Label quality; feature/metadata correlations; PCA visuals.
+### 02 - EDA
+Label quality; feature/metadata correlations; PCA visuals.
 ---
-### 03 - Baselines Pre-selection baselines and sanity checks.
+### 03 - Baselines
+Pre-selection baselines and sanity checks.
 ---
-### 04[1–4] - Intra feature selection (LLD × stats) Same pipeline across the four non-PCA datasets: 
+### 04[1–4] - Intra feature selection (LLD × stats)
+Same pipeline across the four non-PCA datasets: 
 - **Step A (CV):** choose best **k** stats per LLD via nested CV. Inside each fold: - fit RF per column, rank by their **SHAPley values** (joint VA) (sort them descending).
 - **Step B (dev re-rank):** on dev set, re-rank the top-k and keep the final selection (leak-free imputation with train medians; joint VA objective).
 - **Output:** final per-base **X** and SHAP explanations.
@@ -45,7 +49,7 @@
 - Aligns them with DEAM’s VA labels.
 - Produces train/val/test splits for downstream transfer learning experiments.
 ---
-### 07 – Transfer Learning: Training 
+### 07 - Transfer Learning: Training 
 - Trains computer vision backbone models with mel-spectrograms created in Notebook 06 (styles: AST, PANNs, Musicnn, CLAP, VGGish) on DEAM with a regressor head.
 - Also tested with adding a pretraining step from the Deezer dataset (DIY pretraining) and gradual unfreezing of layers from the pre-trained models before fine-tuning on DEAM.
 - Serves as a DL baseline for the task
