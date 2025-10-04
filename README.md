@@ -43,7 +43,6 @@ Same pipeline across the four non-PCA datasets:
 - **Step B (dev re-rank):** on dev set, re-rank the top-k and keep the final selection (leak-free imputation with train medians; joint VA objective).
 - **Output:** final per-base **X** and SHAP explanations.
 
----
 
 #### /1_2080, 2_3900, 3_decorrelated_2080, 4_decorrelated_3900
 Same pipeline across the four non-PCA datasets: 
@@ -51,14 +50,12 @@ Same pipeline across the four non-PCA datasets:
 - **Step B (dev re-rank):** on dev set, re-rank the top-k and keep the final selection (leak-free imputation with train medians; joint VA objective).
 - **Output:** final per-base **X** and SHAP explanations.
 
----
 #### /5_per-group_PCA_2080, 6_per-group_PCA_3900 - Per-group PCA route
 
 - Parse {group}_PC* columns, CV to choose **m PCs per group** (joint VA).
 - Build fold designs with **train medians only**; compare RF/GBR/Ridge/ENet/SVR on dev CV.
 - Group-level SHAP by summing PCs’ |SHAP| within each group.
 
----
 
 #### /7_global_PCA_2080, 8_global_PCA_3900 — Global PCA route - Sweep **n PCs** globally with leak-free CV to pick **best_n**.
 - Compare model families on the chosen n.
