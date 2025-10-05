@@ -7,7 +7,7 @@ XAI with traditional ML for music emotion recognition **VA** (valence-arousal).
 
 **ML prep:** roll time series into statistical descriptors - default **8** and extended **15**.
 
-**Secondary Data:** Deezer: available splits can be downloaded from https://github.com/deezer/deezer_mood_detection_dataset/tree/master
+**Secondary Data:** Deezer - available splits can be downloaded from https://github.com/deezer/deezer_mood_detection_dataset/tree/master
 
 --- 
 ## Notebook map
@@ -39,29 +39,31 @@ Pre-selection baselines and sanity checks.
 
 ---
 
-### 04_intra_feature_selection/ - Intra feature selection (LLD × stats) 
-Same pipeline across the four non-PCA datasets: 
-- **Step A (CV):** choose best **k** stats per LLD via nested CV. Inside each fold: - fit RF per column, rank by their **SHAPley values** (joint VA) (sort them descending).
-- **Step B (dev re-rank):** on dev set, re-rank the top-k and keep the final selection (leak-free imputation with train medians; joint VA objective).
-- **Output:** final per-base **X** and SHAP explanations.
+### 04 — Intra Feature Selection (LLD × stats)
 
+For the four non-PCA bases: 1_2080, 2_3900, 3_decorrelated_2080, 4_decorrelated_3900
 
-#### /1_2080, 2_3900, 3_decorrelated_2080, 4_decorrelated_3900
-Same pipeline across the four non-PCA datasets: 
-- **Step A (CV):** choose best **k** stats per LLD via nested CV. Inside each fold: - fit RF per column, rank by their **SHAPley values** (joint VA) (sort them descending).
-- **Step B (dev re-rank):** on dev set, re-rank the top-k and keep the final selection (leak-free imputation with train medians; joint VA objective).
-- **Output:** final per-base **X** and SHAP explanations.
+- Step A – CV ranking: nested CV; within each fold fit RF, compute SHAP (joint V-A), rank stats per LLD, sweep k.
 
-#### /5_per-group_PCA_2080, 6_per-group_PCA_3900 - Per-group PCA route
+- Step B – Dev re-rank: re-rank top-k on dev (train-median imputation; joint V-A objective).
 
-- Parse {group}_PC* columns, CV to choose **m PCs per group** (joint VA).
-- Build fold designs with **train medians only**; compare RF/GBR/Ridge/ENet/SVR on dev CV.
-- Group-level SHAP by summing PCs’ |SHAP| within each group.
+- Output: final per-base X and fold-aware SHAP explanations.
 
+PCA routes:
 
-#### /7_global_PCA_2080, 8_global_PCA_3900 — Global PCA route - Sweep **n PCs** globally with leak-free CV to pick **best_n**.
-- Compare model families on the chosen n.
-- Permutation test for significance; 2D PC scatter colored by VA/AR; PC↔VA/AR correlations.
+5_per-group_PCA_2080, 6_per-group_PCA_3900
+
+Parse {group}_PC*, CV-choose m PCs/group (joint V-A).
+
+Compare RF/GBR/Ridge/ENet/SVR on dev CV.
+
+Group-level SHAP: sum |SHAP| of PCs within each group.
+
+7_global_PCA_2080, 8_global_PCA_3900
+
+Sweep n global PCs with leak-free CV to pick best_n.
+
+Compare model families; permutation tests; PC↔V/A correlations; 2D PC scatter colored by V/A.
 
 ---
 ### 05_Final_Comparisons
