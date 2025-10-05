@@ -39,7 +39,7 @@ Pre-selection baselines and sanity checks.
 
 ---
 
-### 04 — Intra Feature Selection (LLD × stats)
+### 04 - Intra Feature Selection (LLD × stats)
 
 For the four non-PCA bases: 1_2080, 2_3900, 3_decorrelated_2080, 4_decorrelated_3900
 
