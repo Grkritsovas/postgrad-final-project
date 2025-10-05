@@ -7,6 +7,8 @@ XAI with traditional ML for music emotion recognition **VA** (valence-arousal).
 
 **ML prep:** roll time series into statistical descriptors - default **8** and extended **15**.
 
+**Secondary Data:** Deezer: available splits can be downloaded from https://github.com/deezer/deezer_mood_detection_dataset/tree/master
+
 --- 
 ## Notebook map
 
