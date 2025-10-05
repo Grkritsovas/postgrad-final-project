@@ -66,6 +66,7 @@ PCA routes:
   - Compare model families; permutation tests; PC↔V/A correlations; 2D PC scatter colored by V/A.
 
 ---
+
 ### 05_Final_Comparisons
 
 - Brings together results from all pipelines (raw descriptors, decorrelated, PCA).
@@ -73,24 +74,13 @@ PCA routes:
 - Identifies best-performing and most interpretable setups.
 
 ---
-### 06 – Transfer Learning: Dataset Preparation
 
-- Prepares external embeddings from large pre-trained music models and preprocessed mel spectrograms that match shapes of computer vision models.
-- Aligns them with DEAM’s VA labels.
-- Produces train/val/test splits for downstream transfer learning experiments.
+### 06-08_Deep_Learning
 
----
-### 07 - Transfer Learning: Training 
+- Deezer: Creating the Deezer dataset with metadata extracted from the Deezer API and GENIUS for lyrics (unused at this stage)
+- Deezer_Analysis: EDA on Deezer
+- 06: Dataset preparation for Deep learning benchmarks (mel spectrograms and MERT embeddings)
+- 07: Training computer vision backbones on DEAM with a regressor head (+tested pretraining on Deezer)
+- 08: Train a regressor on MERT embeddings from DEAM (+with pretrain on Deezer) + zeroshot evaluation of Music2Emo (https://huggingface.co/amaai-lab/music2emo)
 
-- Trains computer vision backbone models with mel-spectrograms created in Notebook 06 (styles: AST, PANNs, Musicnn, CLAP, VGGish) on DEAM with a regressor head.
-- Also tested with adding a pretraining step from the Deezer dataset (DIY pretraining) and gradual unfreezing of layers from the pre-trained models before fine-tuning on DEAM.
-- Serves as a DL baseline for the task
-
----
-### 08 – MERT + Music2Emo
-
-- Uses state-of-the-art music embeddings (e.g., MERT) to train a regressor on DEAM.
-- Also tested with adding a pretraining step from Deezer to see if the regressor can become better aligned with the domain task of V-A predictions.
-- Zeroshot tested an efficient multimodal pre-trained model, but only provided it with the MERT embeddings (5th and 6th layer), while Music2Emo usually prefers to be also given chords and keys, instead those were padded with 0s.
-- Provides a benchmark against classical ML + explainable pipelines.
 ---
