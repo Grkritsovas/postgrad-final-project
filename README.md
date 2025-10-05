@@ -51,9 +51,9 @@ For the four non-PCA bases: 1_2080, 2_3900, 3_decorrelated_2080, 4_decorrelated_
 
 PCA routes:
 
-5_per-group_PCA_2080, 6_per-group_PCA_3900
+- 5_per-group_PCA_2080, 6_per-group_PCA_3900
 
-Parse {group}_PC*, CV-choose m PCs/group (joint V-A).
+- - Parse {group}_PC*, CV-choose m PCs/group (joint V-A).
 
 Compare RF/GBR/Ridge/ENet/SVR on dev CV.
 
