@@ -53,17 +53,17 @@ PCA routes:
 
 - 5_per-group_PCA_2080, 6_per-group_PCA_3900
 
-- - Parse {group}_PC*, CV-choose m PCs/group (joint V-A).
+  - Parse {group}_PC*, CV-choose m PCs/group (joint V-A).
 
-Compare RF/GBR/Ridge/ENet/SVR on dev CV.
+  - Compare RF/GBR/Ridge/ENet/SVR on dev CV.
 
-Group-level SHAP: sum |SHAP| of PCs within each group.
+  - Group-level SHAP: sum |SHAP| of PCs within each group.
 
-7_global_PCA_2080, 8_global_PCA_3900
+- 7_global_PCA_2080, 8_global_PCA_3900
 
-Sweep n global PCs with leak-free CV to pick best_n.
+  - Sweep n global PCs with leak-free CV to pick best_n.
 
-Compare model families; permutation tests; PC↔V/A correlations; 2D PC scatter colored by V/A.
+  - Compare model families; permutation tests; PC↔V/A correlations; 2D PC scatter colored by V/A.
 
 ---
 ### 05_Final_Comparisons
