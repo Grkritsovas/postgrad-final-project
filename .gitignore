@@ -12,14 +12,19 @@ token.txt
 data
 
 # --- Irrelevant Folders ---
+audio_files
 results
 deprecated
 notes
 notebooks/temp
+notebooks/audio_files/
 notebooks/experimental_map
 notebooks/sample_images
 notebooks/Untitled.ipynb
-
+notebooks/_images.ipynb
+notebooks/Final_Visualizations
+final_submission
+.gitignore
 # --- Large Files ---
 # --- Large/Binary Artifacts ---
 *.csv
@@ -62,3 +67,9 @@ torch-gpu/
 
 # --- Logs ---
 *.log
+notebooks/_images.ipynb
+notebooks/Final_Visualizations.ipynb
+
+# Ensure ignored dirs
+data/
+deprecated/
