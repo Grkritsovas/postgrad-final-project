@@ -28,7 +28,6 @@ def _stats(s: pd.Series, which: Iterable[str]) -> Dict[str, float]:
         elif w == 'mad': out[w] = (s - s.median()).abs().median()
         elif w == 'variation': out[w] = s.diff().abs().mean()
         elif w == 'trend':
-            # robust trend calculation
             if len(s) >= 10:
                 x = np.arange(len(s))
                 # Linear regression slope
@@ -37,12 +36,12 @@ def _stats(s: pd.Series, which: Iterable[str]) -> Dict[str, float]:
                 out[w] = (s.iloc[-1] - s.iloc[0]) / max(len(s)-1, 1)
     return out
 
+# Aggregate one song's frames->static descriptors for every low-level feature
 def aggregate_low(df_frames: pd.DataFrame, which=DEFAULT_8, sep='_') -> pd.Series:
-    """Aggregate one song's frames→static descriptors for every low-level feature."""
     if df_frames.empty:
         raise ValueError("Empty DataFrame")
     if df_frames.shape[0] < 3:
-        print(f"Warning: Only {df_frames.shape[0]} frames, results may be unreliable")
+        print(df_frames.shape[0]) # less than 3 rows
 
     out = {}
     for col in df_frames.columns:

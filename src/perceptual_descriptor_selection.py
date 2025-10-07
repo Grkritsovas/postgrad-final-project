@@ -46,8 +46,8 @@ def compute_descriptor_ranking_joint_shap(
         # Keep per-column SHAP values (no aggregation)
         desc_v = pd.Series(mean_v, index=bg.columns)
         desc_a = pd.Series(mean_a, index=bg.columns)
-        desc_v_z = (desc_v - desc_v.mean()) / desc_v.std()
-        desc_a_z = (desc_a - desc_a.mean()) / desc_a.std()
+        #desc_v_z = (desc_v - desc_v.mean()) / desc_v.std()
+        #desc_a_z = (desc_a - desc_a.mean()) / desc_a.std()
         #joint_ranking = (desc_v_z.add(desc_a_z, fill_value=0.0) * 0.5).sort_values(ascending=False) # z_score
         #print("Valence sum", desc_v.sum(), "Arousal sum", desc_a.sum())
         joint_ranking  = _l1_merge(desc_v, desc_a)  # fair joint per-descriptor ranking # L1
@@ -201,15 +201,17 @@ def cv_rmse_across_k_nested_joint(
             Xtr = X_all.loc[tr].fillna(med)
             Xva = X_all.loc[va].fillna(med)
 
-            rf = RandomForestRegressor(n_estimators=n_estimators, random_state=42, n_jobs=-1)
+            rf_v = RandomForestRegressor(n_estimators=n_estimators, random_state=42, n_jobs=-1)
+            rf_a = RandomForestRegressor(n_estimators=n_estimators, random_state=43, n_jobs=-1)
 
-            rf.fit(Xtr, y_val.loc[tr]); pv = rf.predict(Xva)
+            rf_v.fit(Xtr, y_val.loc[tr]); pv = rf_v.predict(Xva)
             rmse_v = float(np.sqrt(((y_val.loc[va]-pv)**2).mean()))
 
-            rf.fit(Xtr, y_aro.loc[tr]); pa = rf.predict(Xva)
+            rf_a.fit(Xtr, y_aro.loc[tr]); pa = rf_a.predict(Xva)
             rmse_a = float(np.sqrt(((y_aro.loc[va]-pa)**2).mean()))
 
-            fold_v.append(rmse_v); fold_a.append(rmse_a)
+            fold_v.append(rmse_v)
+            fold_a.append(rmse_a)
 
         rows.append({
             "k": k,
@@ -217,7 +219,7 @@ def cv_rmse_across_k_nested_joint(
             "rmse_val_std":  float(np.std(fold_v)),
             "rmse_aro_mean": float(np.mean(fold_a)),
             "rmse_aro_std":  float(np.std(fold_a)),
-            "rmse_mean":      float(0.5*(np.mean(fold_v)+np.mean(fold_a)))
+            "rmse_mean":     float(0.5*(np.mean(fold_v)+np.mean(fold_a)))
         })
     return pd.DataFrame(rows).sort_values("k").reset_index(drop=True)
 

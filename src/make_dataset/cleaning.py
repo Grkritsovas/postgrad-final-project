@@ -7,10 +7,10 @@ def remove_time_columns(df: pd.DataFrame) -> pd.DataFrame:
     for c in df.columns:
         if c in _TIME_KEYS:
             return df.drop(columns=[c])
-    # heuristic: first column looks like time
+    
     first = df.columns[0]
     if (first.lower() in _TIME_KEYS) or (
-        pd.api.types.is_numeric_dtype(df[first]) and df[first].is_monotonic_increasing
+        pd.api.types.is_numeric_dtype(df[first]) and df[first].is_monotonic_increasing # heuristic for time-like number detection
     ):
         return df.drop(columns=[first])
     return df
@@ -21,7 +21,6 @@ def clean(df: pd.DataFrame, strategy: str = "mean_fill") -> pd.DataFrame:
     df = df.dropna(axis=1, how='all').dropna(axis=0, how='all')
     
     if strategy == "mean_fill":
-        # Only iterate over numeric columns for filling
         for c in df.select_dtypes(include=np.number).columns:
             if df[c].isna().all():
                 df[c] = 0

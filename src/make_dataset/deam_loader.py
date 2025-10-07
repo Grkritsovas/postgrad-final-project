@@ -11,7 +11,7 @@ from sklearn.decomposition import PCA
 sys.path.append('..')
 
 from src.io import load_opensmile_csv
-from src.aggregate import aggregate_low
+from src.make_dataset.aggregate import aggregate_low
 from src.make_dataset.cleaning import clean
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -356,7 +356,7 @@ def remove_correlated_within_groups(
               if mapping.get(core_of_full(col)) == group]
         
         if len(group_cols) > 1:
-            corr_matrix = features_df[group_cols].corr().abs()
+            corr_matrix = features_df[group_cols].corr(method='pearson').abs()
             upper = corr_matrix.where(
                 np.triu(np.ones(corr_matrix.shape), k=1).astype(bool)
             )

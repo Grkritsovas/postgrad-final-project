@@ -3,6 +3,7 @@ from typing import Dict, List
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import seaborn as sns
 import sys
 sys.path.append('..')
@@ -313,3 +314,169 @@ def visualize_category_selections(
 
     plt.tight_layout(); plt.show()
     return selection_matrix, performance_matrix
+
+def plot_custom_barh(df: pd.DataFrame, metric_col: str, title: str, savepath: Path):
+    d = df.sort_values(metric_col, ascending=False).reset_index(drop=True)
+    color_map = {"Classic ML (RF)": "#1f77b4", "DL": "#ff7f0e"}
+    colors = d["Category"].map(color_map)
+
+    h = max(4, 0.35 * len(d))
+    fig, ax = plt.subplots(figsize=(9, h))
+    ax.barh(d["Model"], d[metric_col], color=colors)
+    ax.invert_yaxis()
+    ax.set_xlabel("R²")
+    ax.set_ylabel("Model")
+    ax.set_title(title)
+    ax.grid(axis="x", linestyle="--", alpha=0.5)
+
+    # annotate
+    for i, v in enumerate(d[metric_col].values):
+        off = 3 if v >= 0 else -3
+        ha = "left" if v >= 0 else "right"
+        ax.annotate(f"{v:.3f}", xy=(v, i), xytext=(off, 0),
+                    textcoords="offset points", va="center", ha=ha, fontsize=8)
+    
+    # add a bit of x-margin so labels don’t clip
+    xmin, xmax = d[metric_col].min(), d[metric_col].max()
+    ax.set_xlim(min(0, xmin) - 0.02, xmax + 0.05)
+
+    # legend
+    handles = [mpatches.Patch(color=color_map[k], label=k) for k in color_map]
+    ax.legend(handles=handles, loc="lower right")
+
+    plt.tight_layout()
+    plt.savefig(savepath, bbox_inches="tight")
+    print(f"saved: {savepath}")
+    plt.show()
+
+#create the bins for VA
+def create_bins(y_valence, y_arousal, n_bins=3, method='equal'):
+    if method == 'equal':
+        v_edges = np.linspace(y_valence.min(), y_valence.max(), n_bins + 1)
+        a_edges = np.linspace(y_arousal.min(), y_arousal.max(), n_bins + 1)
+    else: # percentile
+        v_edges = np.percentile(y_valence, np.linspace(0, 100, n_bins + 1))
+        a_edges = np.percentile(y_arousal, np.linspace(0, 100, n_bins + 1))
+    
+    return v_edges, a_edges
+
+def plot_bin_accuracy(pred_v, pred_a, true_v, true_a, n_bins=3, 
+                      method='percentile', title="Model"):
+    """
+    Plot bin accuracy heatmap for VA predictions.
+    
+    Args:
+        pred_v, pred_a: Model predictions
+        true_v, true_a: Ground truth
+        n_bins: Number of bins (creates n_bins x n_bins grid)
+        method: Binning method ('equal' or 'percentile')
+        title: Plot title
+    
+    Returns:
+        Dictionary with accuracy metrics
+    """
+    # Create bins
+    v_edges, a_edges = create_bins(true_v, true_a, n_bins, method)
+    
+    # Assign each point to a bin
+    # Simple approach: loop through each bin and check which points fall in it
+    n_v = n_bins
+    n_a = n_bins
+    
+    # Initialize grids
+    grid_total = np.zeros((n_v, n_a))
+    grid_correct = np.zeros((n_v, n_a))
+    
+    # Assign bins for true and predicted values
+    for i in range(len(true_v)):
+        # Find which bin this true value belongs to
+        true_v_bin = min(np.searchsorted(v_edges[1:], true_v[i]), n_v - 1)
+        true_a_bin = min(np.searchsorted(a_edges[1:], true_a[i]), n_a - 1)
+        
+        # Find which bin the prediction belongs to
+        pred_v_bin = min(np.searchsorted(v_edges[1:], pred_v[i]), n_v - 1)
+        pred_a_bin = min(np.searchsorted(a_edges[1:], pred_a[i]), n_a - 1)
+        
+        # Count total in this true bin
+        grid_total[true_v_bin, true_a_bin] += 1
+        
+        # Count correct if prediction matches true bin
+        if pred_v_bin == true_v_bin and pred_a_bin == true_a_bin:
+            grid_correct[true_v_bin, true_a_bin] += 1
+    
+    # Calculate accuracy percentages
+    grid_pct = np.zeros_like(grid_total)
+    for i in range(n_v):
+        for j in range(n_a):
+            if grid_total[i, j] > 0:
+                grid_pct[i, j] = 100 * grid_correct[i, j] / grid_total[i, j]
+            else:
+                grid_pct[i, j] = np.nan
+    
+    # Create plot
+    fig, ax = plt.subplots(figsize=(8, 6))
+    
+    # Flip for display (low valence at bottom)
+    data_plot = np.flipud(grid_pct)
+    
+    # Create annotations showing correct/total
+    annotations = []
+    for i in range(n_v):
+        row = []
+        for j in range(n_a):
+            if grid_total[i, j] > 0:
+                row.append(f"{int(grid_correct[i, j])}/{int(grid_total[i, j])}")
+            else:
+                row.append("")
+        annotations.append(row)
+    annotations = np.flipud(np.array(annotations))
+    
+    # Plot heatmap
+    sns.heatmap(data_plot, annot=annotations, fmt='', cmap='RdYlGn',
+                vmin=0, vmax=100, cbar_kws={'label': 'Accuracy %'},
+                ax=ax, mask=np.isnan(data_plot))
+    
+    # Set labels
+    v_labels = [f"{v_edges[i]:.1f}-{v_edges[i+1]:.1f}" for i in range(n_v)]
+    a_labels = [f"{a_edges[i]:.1f}-{a_edges[i+1]:.1f}" for i in range(n_a)]
+    
+    ax.set_xticklabels(a_labels)
+    ax.set_yticklabels(v_labels[::-1])
+    ax.set_xlabel('Arousal')
+    ax.set_ylabel('Valence')
+    ax.set_title(title)
+    
+    # Calculate overall accuracies and count how many predictions match their true bin
+    correct_v = 0
+    correct_a = 0
+    correct_both = 0
+    
+    for i in range(len(true_v)):
+        true_v_bin = min(np.searchsorted(v_edges[1:], true_v[i]), n_v - 1)
+        true_a_bin = min(np.searchsorted(a_edges[1:], true_a[i]), n_a - 1)
+        pred_v_bin = min(np.searchsorted(v_edges[1:], pred_v[i]), n_v - 1)
+        pred_a_bin = min(np.searchsorted(a_edges[1:], pred_a[i]), n_a - 1)
+        
+        if pred_v_bin == true_v_bin:
+            correct_v += 1
+        if pred_a_bin == true_a_bin:
+            correct_a += 1
+        if pred_v_bin == true_v_bin and pred_a_bin == true_a_bin:
+            correct_both += 1
+    
+    v_acc = 100 * correct_v / len(true_v)
+    a_acc = 100 * correct_a / len(true_a)
+    both_acc = 100 * correct_both / len(true_v)
+    
+    print(f"\n{title} Accuracies:")
+    print(f"  Valence: {v_acc:.1f}%")
+    print(f"  Arousal: {a_acc:.1f}%")
+    print(f"  Both correct: {both_acc:.1f}%")
+    
+    return {
+        'v_acc': v_acc,
+        'a_acc': a_acc,
+        'both_acc': both_acc,
+        'v_edges': v_edges,
+        'a_edges': a_edges
+    }

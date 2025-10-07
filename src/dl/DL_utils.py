@@ -50,7 +50,7 @@ class PretrainedModel(nn.Module):
         x = self.channel_adapter(x)
         features = self.backbone(x)
         return self.regressor(features)
-
+    
 def evaluate_music2emo(embedding_dir: Path, labels_df, test_ids):
     """Zero-shot evaluation of music2emo on DEAM labels."""
     import sys, numpy as np, torch
