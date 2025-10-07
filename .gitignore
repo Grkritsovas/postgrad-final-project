@@ -10,21 +10,21 @@ token.txt
 # --- Copyrighted Material ---
 # Ignore folders containing lyrics or audio files
 data
+audio_files
+notebooks/audio_files/
 
 # --- Irrelevant Folders ---
-audio_files
 results
 deprecated
 notes
 notebooks/temp
-notebooks/audio_files/
 notebooks/experimental_map
 notebooks/sample_images
 notebooks/Untitled.ipynb
 notebooks/_images.ipynb
 notebooks/Final_Visualizations
 final_submission
-.gitignore
+
 # --- Large Files ---
 # --- Large/Binary Artifacts ---
 *.csv
@@ -69,7 +69,3 @@ torch-gpu/
 *.log
 notebooks/_images.ipynb
 notebooks/Final_Visualizations.ipynb
-
-# Ensure ignored dirs
-data/
-deprecated/
