@@ -9,7 +9,7 @@ XAI with traditional ML for music emotion recognition **VA** (valence-arousal).
 
 **Secondary Data:** Deezer - available splits can be downloaded from https://github.com/deezer/deezer_mood_detection_dataset/tree/master
 
-**src/** Useful utils that notebooks call for re-usable functions and cleaner code cells
+**src:** Useful utils that notebooks call for re-usable functions and cleaner code cells
 
 --- 
 ## Notebook map
